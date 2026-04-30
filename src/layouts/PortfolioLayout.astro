@@ -15,6 +15,7 @@ interface Props {
 }
 
 const { title, description, siteName, themeColor, keywords, canonicalUrl, ogImageUrl, structuredData } = Astro.props;
+const showTweaksPanel = !import.meta.env.PROD;
 ---
 
 <!doctype html>
@@ -57,7 +58,7 @@ const { title, description, siteName, themeColor, keywords, canonicalUrl, ogImag
   </head>
   <body>
     <slot />
-    <TweaksPanel />
+    <TweaksPanel showControls={showTweaksPanel} />
     <Analytics />
   </body>
 </html>

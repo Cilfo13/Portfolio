@@ -1,4 +1,10 @@
 ---
+interface Props {
+  showControls?: boolean;
+}
+
+const { showControls = true } = Astro.props;
+
 const tweakDefaults = {
   accentFrom: '#7c3aed',
   accentTo: '#06b6d4',
@@ -8,46 +14,48 @@ const tweakDefaults = {
 };
 ---
 
-<aside class="tweaks-shell" data-tweaks-shell>
-  <button class="tweaks-toggle" type="button" data-tweaks-toggle aria-expanded="false" aria-controls="tweaks-panel">
-    Open Tweaks
-  </button>
+{showControls && (
+  <aside class="tweaks-shell" data-tweaks-shell>
+    <button class="tweaks-toggle" type="button" data-tweaks-toggle aria-expanded="false" aria-controls="tweaks-panel">
+      Open Tweaks
+    </button>
 
-  <form class="tweaks-panel" id="tweaks-panel" data-tweaks-panel hidden>
-    <section class="tweaks-section">
-      <div class="tweaks-section-label">Palette</div>
+    <form class="tweaks-panel" id="tweaks-panel" data-tweaks-panel hidden>
+      <section class="tweaks-section">
+        <div class="tweaks-section-label">Palette</div>
 
-      <label class="tweaks-field">
-        <span>Accent From (Violet)</span>
-        <input type="color" name="accentFrom" value={tweakDefaults.accentFrom} />
-      </label>
+        <label class="tweaks-field">
+          <span>Accent From (Violet)</span>
+          <input type="color" name="accentFrom" value={tweakDefaults.accentFrom} />
+        </label>
 
-      <label class="tweaks-field">
-        <span>Accent To (Cyan)</span>
-        <input type="color" name="accentTo" value={tweakDefaults.accentTo} />
-      </label>
+        <label class="tweaks-field">
+          <span>Accent To (Cyan)</span>
+          <input type="color" name="accentTo" value={tweakDefaults.accentTo} />
+        </label>
 
-      <label class="tweaks-field">
-        <span>Background Base</span>
-        <input type="color" name="bgBase" value={tweakDefaults.bgBase} />
-      </label>
-    </section>
+        <label class="tweaks-field">
+          <span>Background Base</span>
+          <input type="color" name="bgBase" value={tweakDefaults.bgBase} />
+        </label>
+      </section>
 
-    <section class="tweaks-section">
-      <div class="tweaks-section-label">Hero</div>
+      <section class="tweaks-section">
+        <div class="tweaks-section-label">Hero</div>
 
-      <label class="tweaks-field">
-        <span data-tweaks-range-label>Name Font Size: {tweakDefaults.nameSize}</span>
-        <input type="range" name="nameSize" min="48" max="120" step="2" value={tweakDefaults.nameSize} />
-      </label>
+        <label class="tweaks-field">
+          <span data-tweaks-range-label>Name Font Size: {tweakDefaults.nameSize}</span>
+          <input type="range" name="nameSize" min="48" max="120" step="2" value={tweakDefaults.nameSize} />
+        </label>
 
-      <label class="tweaks-toggle-row">
-        <span>Floating Shapes</span>
-        <input type="checkbox" name="showFloatingShapes" checked={tweakDefaults.showFloatingShapes} />
-      </label>
-    </section>
-  </form>
-</aside>
+        <label class="tweaks-toggle-row">
+          <span>Floating Shapes</span>
+          <input type="checkbox" name="showFloatingShapes" checked={tweakDefaults.showFloatingShapes} />
+        </label>
+      </section>
+    </form>
+  </aside>
+)}
 
 <script is:inline define:vars={{ tweakDefaults }}>
   const storageKey = 'portfolio-tweaks';
@@ -135,6 +143,7 @@ const tweakDefaults = {
     const rangeLabel = document.querySelector('[data-tweaks-range-label]');
 
     if (!(shell instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLFormElement)) {
+      applyTweaks(readTweaks());
       return;
     }
 
