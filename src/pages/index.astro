@@ -1,0 +1,16 @@
+---
+import { readFileSync } from 'node:fs';
+
+const headHtml = readFileSync(new URL('../content/portfolio-head.html', import.meta.url), 'utf-8');
+const bodyHtml = readFileSync(new URL('../content/portfolio-body.html', import.meta.url), 'utf-8');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Fragment set:html={headHtml} />
+  </head>
+  <body>
+    <Fragment set:html={bodyHtml} />
+  </body>
+</html>
