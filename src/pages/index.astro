@@ -1,8 +1,6 @@
 ---
-import { readFileSync } from 'node:fs';
-
-const headHtml = readFileSync(new URL('../content/portfolio-head.html', import.meta.url), 'utf-8');
-const bodyHtml = readFileSync(new URL('../content/portfolio-body.html', import.meta.url), 'utf-8');
+import headHtml from '../content/portfolio-head.html?raw';
+import bodyHtml from '../content/portfolio-body.html?raw';
 ---
 
 <!doctype html>
