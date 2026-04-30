@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Angel Cilfone monogram icon">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="16" fill="#0a0a0f" />
+  <path d="M32 12 46 52H39.5L36.5 43H27.5L24.5 52H18L32 12Zm0 11.2L29.6 36h4.8L32 23.2Z" fill="url(#g)" />
+  <path d="M49 19a15 15 0 0 0-11-5.2v5.5a9.2 9.2 0 1 1 0 18.4V43A14.8 14.8 0 0 0 49 19Z" fill="#e8e8f0" opacity="0.92" />
+</svg>

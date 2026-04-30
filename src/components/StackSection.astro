@@ -1,0 +1,23 @@
+---
+import { stackCategories } from '../data/portfolio';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="stack">
+  <SectionHeading label="// tech stack">
+    What I <span class="grad-text">work with</span>
+  </SectionHeading>
+
+  <div class="stack-grid fade-in-up delay-1">
+    {stackCategories.map((category, index) => (
+      <div class="fade-in-up" style={`transition-delay: ${0.1 * index}s;`}>
+        <div class="stack-category-label">{category.label}</div>
+        <div class="tech-badges">
+          {category.techs.map((tech) => (
+            <span class="tech-badge">{tech}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

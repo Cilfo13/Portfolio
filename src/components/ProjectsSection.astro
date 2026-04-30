@@ -1,0 +1,56 @@
+---
+import { pipelineCard, projects } from '../data/portfolio';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="projects">
+  <SectionHeading label="// projects">
+    What I've <span class="grad-text">built</span>
+  </SectionHeading>
+
+  <div class="projects-grid">
+    {projects.map((project, index) => (
+      <div class="project-card fade-in-up" style={`transition-delay: ${0.1 * index}s;`}>
+        <div class="project-glow"></div>
+        {project.status && (
+          <div class="project-status status-dev">
+            <span class="status-dot"></span>
+            {project.status}
+          </div>
+        )}
+        <div class="project-name">{project.name}</div>
+        <div class="project-tagline">{project.tagline}</div>
+        <p class="project-desc">{project.description}</p>
+        <div class="project-tech">
+          {project.tech.map((tech) => (
+            <span class="project-tech-tag">{tech}</span>
+          ))}
+        </div>
+        {project.link ? (
+          <a href={project.link} target="_blank" rel="noopener noreferrer" class="project-link-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+              <polyline points="15 3 21 3 21 9"></polyline>
+              <line x1="10" y1="14" x2="21" y2="3"></line>
+            </svg>
+            View Project
+          </a>
+        ) : (
+          <span class="coming-soon">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Coming Soon
+          </span>
+        )}
+      </div>
+    ))}
+
+    <div class="project-card project-pipeline-card fade-in-up delay-2">
+      <div class="project-pipeline-icon">+</div>
+      <div class="project-pipeline-title">{pipelineCard.title}</div>
+      <div class="project-pipeline-description" set:html={pipelineCard.description}></div>
+    </div>
+  </div>
+</section>

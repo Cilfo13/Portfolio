@@ -1,0 +1,29 @@
+---
+import { aboutParagraphs, traits } from '../data/portfolio';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="about">
+  <SectionHeading label="// about me">
+    Who I <span class="grad-text">am</span>
+  </SectionHeading>
+
+  <div class="about-grid">
+    <div class="about-bio fade-in-up delay-1">
+      {aboutParagraphs.map((paragraph, index) => (
+        <p class:list={[index < aboutParagraphs.length - 1 && 'about-paragraph-spacing']} set:html={paragraph} />
+      ))}
+    </div>
+    <div class="about-traits fade-in-up delay-2">
+      {traits.map((trait) => (
+        <div class="trait-card">
+          <div class="trait-icon" set:html={trait.iconHtml}></div>
+          <div>
+            <div class="trait-title">{trait.title}</div>
+            <div class="trait-desc" set:html={trait.description}></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

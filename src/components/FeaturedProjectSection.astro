@@ -1,0 +1,59 @@
+---
+import { featuredProject } from '../data/portfolio';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="featured" class="featured-section">
+  <SectionHeading label="// flagship work">
+    Featured <span class="grad-text">Project</span>
+  </SectionHeading>
+
+  <div class="featured-card fade-in-up delay-1">
+    <div class="featured-glow-1"></div>
+    <div class="featured-glow-2"></div>
+
+    <div class="featured-top-row">
+      <div class="featured-top-group">
+        <span class="featured-label">&#9733; Featured</span>
+        <span class="project-status featured-live-status">
+          <span class="status-dot featured-live-dot"></span>
+          {featuredProject.productionStatus}
+        </span>
+      </div>
+      <div class="featured-production-note">
+        <span class="featured-note-dot"></span>
+        {featuredProject.productionNote}
+      </div>
+    </div>
+
+    <div class="featured-title-block">
+      <h3 class="featured-name">{featuredProject.name}</h3>
+      <p class="featured-tagline" set:html={featuredProject.tagline}></p>
+    </div>
+
+    <p class="featured-desc" set:html={featuredProject.description}></p>
+
+    <div class="featured-highlights">
+      {featuredProject.highlights.map((highlight) => (
+        <div class="featured-highlight">
+          <span class="featured-highlight-icon" set:html={highlight.iconHtml}></span>
+          <span>{highlight.text}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="featured-stack">
+      {featuredProject.stack.map((tech) => (
+        <span class="featured-tech">{tech}</span>
+      ))}
+    </div>
+
+    <div class="featured-footer-note">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+        <path d="M7 11V7a5 5 0 0110 0v4"></path>
+      </svg>
+      <span>{featuredProject.accessNote}</span>
+    </div>
+  </div>
+</section>

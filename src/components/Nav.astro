@@ -1,0 +1,14 @@
+---
+import { navLinks } from '../data/portfolio';
+---
+
+<nav data-nav>
+  <div class="nav-logo">AC.</div>
+  <ul class="nav-links">
+    {navLinks.map((link) => (
+      <li>
+        <a href={link.href}>{link.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>

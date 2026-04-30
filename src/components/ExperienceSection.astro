@@ -1,0 +1,33 @@
+---
+import { experienceItems } from '../data/portfolio';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section id="experience">
+  <SectionHeading label="// experience">
+    Where I've <span class="grad-text">worked</span>
+  </SectionHeading>
+
+  <div class="timeline">
+    {experienceItems.map((job, index) => (
+      <div class="timeline-item fade-in-up" style={`transition-delay: ${0.15 * index}s;`}>
+        <div class="timeline-dot"></div>
+        <div class="exp-card">
+          <div class="exp-role">
+            {job.role} &mdash; <span class="exp-company" set:html={job.company}></span>
+          </div>
+          <div class="exp-meta">
+            <span set:html={job.period}></span>
+            <span class="exp-meta-badge" set:html={job.type}></span>
+          </div>
+          <p class="exp-desc">{job.description}</p>
+          <div class="exp-stack">
+            {job.stack.map((tech) => (
+              <span class="exp-tech">{tech}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
