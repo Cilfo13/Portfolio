@@ -1,0 +1,216 @@
+---
+const tweakDefaults = {
+  accentFrom: '#7c3aed',
+  accentTo: '#06b6d4',
+  bgBase: '#0a0a0f',
+  nameSize: 88,
+  showFloatingShapes: true,
+};
+---
+
+<aside class="tweaks-shell" data-tweaks-shell>
+  <button class="tweaks-toggle" type="button" data-tweaks-toggle aria-expanded="false" aria-controls="tweaks-panel">
+    Open Tweaks
+  </button>
+
+  <form class="tweaks-panel" id="tweaks-panel" data-tweaks-panel hidden>
+    <section class="tweaks-section">
+      <div class="tweaks-section-label">Palette</div>
+
+      <label class="tweaks-field">
+        <span>Accent From (Violet)</span>
+        <input type="color" name="accentFrom" value={tweakDefaults.accentFrom} />
+      </label>
+
+      <label class="tweaks-field">
+        <span>Accent To (Cyan)</span>
+        <input type="color" name="accentTo" value={tweakDefaults.accentTo} />
+      </label>
+
+      <label class="tweaks-field">
+        <span>Background Base</span>
+        <input type="color" name="bgBase" value={tweakDefaults.bgBase} />
+      </label>
+    </section>
+
+    <section class="tweaks-section">
+      <div class="tweaks-section-label">Hero</div>
+
+      <label class="tweaks-field">
+        <span data-tweaks-range-label>Name Font Size: {tweakDefaults.nameSize}</span>
+        <input type="range" name="nameSize" min="48" max="120" step="2" value={tweakDefaults.nameSize} />
+      </label>
+
+      <label class="tweaks-toggle-row">
+        <span>Floating Shapes</span>
+        <input type="checkbox" name="showFloatingShapes" checked={tweakDefaults.showFloatingShapes} />
+      </label>
+    </section>
+  </form>
+</aside>
+
+<script is:inline define:vars={{ tweakDefaults }}>
+  const storageKey = 'portfolio-tweaks';
+
+  const readTweaks = () => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (!stored) {
+        return { ...tweakDefaults };
+      }
+
+      return { ...tweakDefaults, ...JSON.parse(stored) };
+    } catch {
+      return { ...tweakDefaults };
+    }
+  };
+
+  const writeTweaks = (tweaks) => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(tweaks));
+    } catch {
+      return;
+    }
+  };
+
+  const applyTweaks = (tweaks) => {
+    const root = document.documentElement;
+    root.style.setProperty('--violet', tweaks.accentFrom);
+    root.style.setProperty('--cyan', tweaks.accentTo);
+    root.style.setProperty('--grad', `linear-gradient(135deg, ${tweaks.accentFrom}, ${tweaks.accentTo})`);
+    root.style.setProperty('--bg', tweaks.bgBase);
+
+    const heroName = document.querySelector('.hero-name');
+    if (heroName instanceof HTMLElement) {
+      heroName.style.fontSize = `${tweaks.nameSize}px`;
+    }
+
+    document.querySelectorAll('[data-floating-shapes]').forEach((node) => {
+      if (node instanceof HTMLElement) {
+        node.style.display = tweaks.showFloatingShapes ? '' : 'none';
+      }
+    });
+  };
+
+  const initScrollReveal = () => {
+    const elements = document.querySelectorAll('.fade-in-up');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.12 }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+  };
+
+  const initNavShadow = () => {
+    const nav = document.querySelector('[data-nav]');
+    if (!(nav instanceof HTMLElement)) {
+      return;
+    }
+
+    const syncShadow = () => {
+      nav.style.boxShadow = window.scrollY > 20 ? '0 2px 40px rgba(0,0,0,0.4)' : 'none';
+    };
+
+    syncShadow();
+    window.addEventListener('scroll', syncShadow, { passive: true });
+  };
+
+  const initCurrentYear = () => {
+    document.querySelectorAll('[data-current-year]').forEach((node) => {
+      node.textContent = String(new Date().getFullYear());
+    });
+  };
+
+  const initTweaksPanel = () => {
+    const shell = document.querySelector('[data-tweaks-shell]');
+    const toggle = document.querySelector('[data-tweaks-toggle]');
+    const panel = document.querySelector('[data-tweaks-panel]');
+    const rangeLabel = document.querySelector('[data-tweaks-range-label]');
+
+    if (!(shell instanceof HTMLElement) || !(toggle instanceof HTMLButtonElement) || !(panel instanceof HTMLFormElement)) {
+      return;
+    }
+
+    let open = false;
+    let tweaks = readTweaks();
+
+    const syncPanelState = () => {
+      shell.dataset.open = String(open);
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.textContent = open ? 'Close Tweaks' : 'Open Tweaks';
+    };
+
+    const syncFormState = () => {
+      const accentFrom = panel.elements.namedItem('accentFrom');
+      const accentTo = panel.elements.namedItem('accentTo');
+      const bgBase = panel.elements.namedItem('bgBase');
+      const nameSize = panel.elements.namedItem('nameSize');
+      const showFloatingShapes = panel.elements.namedItem('showFloatingShapes');
+
+      if (accentFrom instanceof HTMLInputElement) {
+        accentFrom.value = tweaks.accentFrom;
+      }
+
+      if (accentTo instanceof HTMLInputElement) {
+        accentTo.value = tweaks.accentTo;
+      }
+
+      if (bgBase instanceof HTMLInputElement) {
+        bgBase.value = tweaks.bgBase;
+      }
+
+      if (nameSize instanceof HTMLInputElement) {
+        nameSize.value = String(tweaks.nameSize);
+      }
+
+      if (showFloatingShapes instanceof HTMLInputElement) {
+        showFloatingShapes.checked = Boolean(tweaks.showFloatingShapes);
+      }
+
+      if (rangeLabel instanceof HTMLElement) {
+        rangeLabel.textContent = `Name Font Size: ${tweaks.nameSize}`;
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      open = !open;
+      syncPanelState();
+    });
+
+    panel.addEventListener('input', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.name) {
+        return;
+      }
+
+      if (target.type === 'checkbox') {
+        tweaks = { ...tweaks, [target.name]: target.checked };
+      } else if (target.type === 'range') {
+        tweaks = { ...tweaks, [target.name]: Number(target.value) };
+      } else {
+        tweaks = { ...tweaks, [target.name]: target.value };
+      }
+
+      applyTweaks(tweaks);
+      writeTweaks(tweaks);
+      syncFormState();
+    });
+
+    applyTweaks(tweaks);
+    syncFormState();
+    syncPanelState();
+  };
+
+  initScrollReveal();
+  initNavShadow();
+  initCurrentYear();
+  initTweaksPanel();
+</script>
